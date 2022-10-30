@@ -3,6 +3,8 @@
 sudo apt-get update && export DEBIAN_FRONTEND=noninteractive
 sudo apt-get -y install --no-install-recommends vim
 
+cp .vimrc $HOME/.vimrc
+
 ./zsh-in-docker.sh \
     -p git -p git-auto-fetch \
     -p https://github.com/zsh-users/zsh-autosuggestions \
