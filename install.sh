@@ -3,13 +3,12 @@ set -ex
 
 SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
-
 PACKAGES=""
 DOTFILES=""
 
-while getopts ":p:d:" opt; do
+while getopts ":i:d:" opt; do
     case ${opt} in
-        p)  PACKAGES="${PACKAGES}$OPTARG "
+        i)  PACKAGES="${PACKAGES}$OPTARG "
             ;;
         d)  DOTFILES="${DOTFILES}$OPTARG "
         ;;
@@ -22,6 +21,9 @@ while getopts ":p:d:" opt; do
     esac
 done
 shift $((OPTIND -1))
+
+echo "restliche argumente:"
+echo $@
 
 echo
 echo "Installing packages and dotfiles:"
@@ -39,13 +41,6 @@ done
 
 GITHUB=https://raw.githubusercontent.com/schemaitat
 
-sh -c "$(wget -qO - ${GITHUB}/vscode-dev-container/main/zsh-in-docker.sh)" -- \
-    -p git -p git-auto-fetch \
-    -p https://github.com/zsh-users/zsh-autosuggestions \
-    -p https://github.com/zsh-users/zsh-completions \
-    -p https://github.com/zsh-users/zsh-syntax-highlighting \
-    -a 'CASE_SENSITIVE="true"' \
-    -a 'HYPHEN_INSENSITIVE="true"' \
-    -a 'export TERM=xterm-256color'
+sh -c "$(wget -qO - ${GITHUB}/vscode-dev-container/main/zsh-in-docker.sh)" -- $@
 
 sh -c "$(wget -qO - ${GITHUB}/vscode-dev-container/main/zshrc-personal.sh)"

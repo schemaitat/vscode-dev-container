@@ -26,6 +26,13 @@ COPY install.sh /tmp/install.sh
 RUN sudo chmod +x /tmp/install.sh && /tmp/install.sh \
     -d https://raw.githubusercontent.com/schemaitat/dotfiles/master/.vimrc \
     -d https://raw.githubusercontent.com/schemaitat/dotfiles/master/.tmux.conf \
-    -p vim -p tmux
+    -i vim -i tmux \
+    -p git -p git-auto-fetch \
+    -p https://github.com/zsh-users/zsh-autosuggestions \
+    -p https://github.com/zsh-users/zsh-completions \
+    -p https://github.com/zsh-users/zsh-syntax-highlighting \
+    -a 'CASE_SENSITIVE="true"' \
+    -a 'HYPHEN_INSENSITIVE="true"' \
+    -a 'export TERM=xterm-256color'
 
 ENTRYPOINT [ "/bin/zsh" ]
