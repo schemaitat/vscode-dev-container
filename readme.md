@@ -18,7 +18,7 @@ Simply put this into your .devcontainer/Dockerfile.
 ```Dockerfile
 USER 1000
 
-RUN sh -c "$(wget -qO - https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/install.sh)" -- \
+RUN sh -c "$(wget -qO - https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/zsh-in-docker.sh)" -- \
     -d https://raw.githubusercontent.com/schemaitat/dotfiles/master/.vimrc \
     -d https://raw.githubusercontent.com/schemaitat/dotfiles/master/.tmux.conf \
     -i vim -i tmux \
