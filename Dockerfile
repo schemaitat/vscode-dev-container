@@ -23,6 +23,9 @@ USER $USERNAME
 # RUN sh -c "$(wget -qO - https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/install.sh)"; fi
 
 COPY install.sh /tmp/install.sh
-RUN sudo chmod +x /tmp/install.sh && /tmp/install.sh
+RUN sudo chmod +x /tmp/install.sh && /tmp/install.sh \
+    -d https://raw.githubusercontent.com/schemaitat/dotfiles/master/.vimrc \
+    -d https://raw.githubusercontent.com/schemaitat/dotfiles/master/.tmux.conf \
+    -p vim -p tmux
 
 ENTRYPOINT [ "/bin/zsh" ]

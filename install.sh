@@ -3,13 +3,41 @@ set -ex
 
 SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
+
+PACKAGES=""
+DOTFILES=""
+
+while getopts ":p:d:" opt; do
+    case ${opt} in
+        p)  PACKAGES="${PACKAGES}$OPTARG "
+            ;;
+        d)  DOTFILES="${DOTFILES}$OPTARG "
+        ;;
+        \?)
+            echo "Invalid option: $OPTARG" 1>&2
+            ;;
+        :)
+            echo "Invalid option: $OPTARG requires an argument" 1>&2
+            ;;
+    esac
+done
+shift $((OPTIND -1))
+
+echo
+echo "Installing packages and dotfiles:"
+echo "    PACKAGES: ${PACKAGES}"
+echo "    DOTFILES: ${DOTFILES}"
+echo
+
 sudo apt-get update && export DEBIAN_FRONTEND=noninteractive
-sudo apt-get -y install --no-install-recommends vim tmux
+sudo apt-get -y install --no-install-recommends ${PACKAGES}
+
+
+for file in $DOTFILES; do
+    cd && curl -sO $file
+done
 
 GITHUB=https://raw.githubusercontent.com/schemaitat
-
-curl -s ${GITHUB}/dotfiles/master/.vimrc > $HOME/.vimrc
-curl -s ${GITHUB}/dotfiles/master/.tmux.conf > $HOME/.tmux.conf
 
 sh -c "$(wget -qO - ${GITHUB}/vscode-dev-container/main/zsh-in-docker.sh)" -- \
     -p git -p git-auto-fetch \
