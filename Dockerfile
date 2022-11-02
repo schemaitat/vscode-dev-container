@@ -20,9 +20,9 @@ RUN groupadd --gid $USER_GID $USERNAME \
 
 USER $USERNAME
 
-# RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)" -- \
-COPY . /tmp
-RUN sudo chmod +x /tmp/install.sh && \
-    /tmp/install.sh
+# RUN sh -c "$(wget -qO - https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/install.sh)"; fi
+
+COPY install.sh /tmp/install.sh
+RUN sudo chmod +x /tmp/install.sh && /tmp/install.sh
 
 ENTRYPOINT [ "/bin/zsh" ]
