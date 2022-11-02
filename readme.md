@@ -1,15 +1,11 @@
 # How To
 
-This repository is used to make the vscode devcontainer look and feel like my local environment.
+This repository is used to make a vscode devcontainer look and feel like my local setup. This is derived from https://github.com/deluan/zsh-in-docker.
 
 Simply this into your .devcontainer/Dockerfile.
 
 ```Dockerfile
-RUN cd /tmp && \
-    git clone https://github.com/schemaitat/vscode-dev-container.git && \
-    chmod -R +x /tmp/vscode-dev-container
-
 USER 1000
 
-RUN /tmp/vscode-dev-container/install.sh
+RUN sh -c "$(wget -qO - https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/install.sh)"
 ```
