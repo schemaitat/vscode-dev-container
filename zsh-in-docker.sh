@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# credits go to:
+# this is an extension of
 # https://github.com/deluan/zsh-in-docker/blob/master/zsh-in-docker.sh
 
 set -e
@@ -8,15 +8,23 @@ set -e
 THEME=default
 PLUGINS=""
 ZSHRC_APPEND=""
-DRY_RUN=false
+PACKAGES=""
+DOTFILES=""
+SCRIPTS=""
 
-while getopts ":t:p:a:d:" opt; do
+while getopts ":t:p:a:d:i:d:s:" opt; do
     case ${opt} in
         t)  THEME=$OPTARG
             ;;
         p)  PLUGINS="${PLUGINS}$OPTARG "
             ;;
         a)  ZSHRC_APPEND="$ZSHRC_APPEND\n$OPTARG"
+            ;;
+        i)  PACKAGES="${PACKAGES}$OPTARG "
+            ;;
+        d)  DOTFILES="${DOTFILES}$OPTARG "
+            ;;
+        s)  SCRIPTS="${SCRIPTS}$OPTARG "
             ;;
         \?)
             echo "Invalid option: $OPTARG" 1>&2
@@ -28,11 +36,15 @@ while getopts ":t:p:a:d:" opt; do
 done
 shift $((OPTIND -1))
 
-echo
-echo "Installing Oh-My-Zsh with:"
-echo "  THEME   = $THEME"
-echo "  PLUGINS = $PLUGINS"
-echo
+
+cat << EOF 
+Installing with:
+    PACKAGES = $PACKAGES
+    THEME   = $THEME
+    PLUGINS = $PLUGINS
+    DOTFILES = $DOTFILES
+    SCRIPTS = $SCRIPTS
+EOF
 
 check_dist() {
     (
@@ -66,18 +78,20 @@ install_dependencies() {
         return
     fi
 
+    PACKAGES="${PACKAGES} git curl zsh"
+
     case $DIST in
         alpine)
-            $Sudo apk add --update --no-cache git curl zsh
+            $Sudo apk add --update --no-cache $PACKAGES
         ;;
         amzn)
             $Sudo yum update -y
-            $Sudo yum install -y git curl zsh
+            $Sudo yum install -y $PACKAGES
             $Sudo yum install -y ncurses-compat-libs # this is required for AMZN Linux (ref: https://github.com/emqx/emqx/issues/2503)
         ;;
         *)
             $Sudo apt-get update
-            $Sudo apt-get -y install git curl zsh locales
+            $Sudo apt-get -y install $PACKAGES locales
             if [ "$VERSION" != "14.04" ]; then
                 $Sudo apt-get -y install locales-all
             fi
@@ -159,3 +173,18 @@ if [ "$THEME" = "default" ]; then
     git clone https://github.com/romkatv/powerlevel10k $HOME/.oh-my-zsh/custom/themes/powerlevel10k
     powerline10k_config >> $HOME/.zshrc
 fi
+
+# add dotfiles
+for file in $DOTFILES; do
+    cd && curl -sO $file
+done
+
+# run additional post scripts
+for script in ${SCRIPTS}; do
+    if [ "`echo $script | grep -E '^http.*'`" != "" ]; then
+        echo "Installing $script"
+        sh -c "$(wget -qO - $script)"
+    else
+        echo "Post scripts must be the url of the raw script."
+    fi
+done

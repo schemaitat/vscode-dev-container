@@ -2,7 +2,18 @@
 
 This repository is used to make a vscode devcontainer look and feel like my local setup. This is derived from https://github.com/deluan/zsh-in-docker.
 
-Simply this into your .devcontainer/Dockerfile. Use -i to add debian packages and -d to add raw dotfiles (which will be put in $HOME). Use -p to add oh-my-zsh packages, -a to append stuff to .zshrc and -t to set a zsh theme.
+The zsh-in-docker.zsh accepts the following parameters, see also the example below.
+
+```
+    -i) to add packages
+    -d) to add raw dotfiles (which will be put in $HOME)
+    -p) to add oh-my-zsh packages
+    -a) to append lines to .zshrc
+    -t) to set a zsh theme
+    -s) to run raw post scripts 
+```
+
+Simply put this into your .devcontainer/Dockerfile. 
 
 ```Dockerfile
 USER 1000
@@ -15,7 +26,8 @@ RUN sh -c "$(wget -qO - https://raw.githubusercontent.com/schemaitat/vscode-dev-
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-completions \
     -p https://github.com/zsh-users/zsh-syntax-highlighting \
-    -a 'CASE_SENSITIVE="true"' \
+    -a 'CASE_SENSITIVE="false"' \
     -a 'HYPHEN_INSENSITIVE="true"' \
-    -a 'export TERM=xterm-256color'
+    -a 'export TERM=xterm-256color' \
+    -s https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/zshrc-personal.sh
 ```

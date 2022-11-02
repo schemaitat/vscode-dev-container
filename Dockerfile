@@ -22,8 +22,8 @@ USER $USERNAME
 
 # RUN sh -c "$(wget -qO - https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/install.sh)"; fi
 
-COPY install.sh /tmp/install.sh
-RUN sudo chmod +x /tmp/install.sh && /tmp/install.sh \
+COPY zsh-in-docker.sh /tmp/zsh-in-docker.sh
+RUN sudo chmod +x /tmp/zsh-in-docker.sh && /tmp/zsh-in-docker.sh \
     -d https://raw.githubusercontent.com/schemaitat/dotfiles/master/.vimrc \
     -d https://raw.githubusercontent.com/schemaitat/dotfiles/master/.tmux.conf \
     -i vim -i tmux \
@@ -33,6 +33,7 @@ RUN sudo chmod +x /tmp/install.sh && /tmp/install.sh \
     -p https://github.com/zsh-users/zsh-syntax-highlighting \
     -a 'CASE_SENSITIVE="true"' \
     -a 'HYPHEN_INSENSITIVE="true"' \
-    -a 'export TERM=xterm-256color'
+    -a 'export TERM=xterm-256color' \
+    -s https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/zshrc-personal.sh
 
 ENTRYPOINT [ "/bin/zsh" ]
