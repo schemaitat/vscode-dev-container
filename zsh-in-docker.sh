@@ -188,3 +188,14 @@ for script in ${SCRIPTS}; do
         echo "Post scripts must be the url of the raw script."
     fi
 done
+
+# install tmux plugin manager if tmux is a packages
+# see https://github.com/tmux-plugins/tpm/blob/master/docs/managing_plugins_via_cmd_line.md
+if [ -z "${PACKAGES##*tmux*}" ]; then
+    # set default shell for tmux
+    echo "set-option -g default-shell /bin/zsh" >> ~/.tmux.conf
+
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    # install plugins specified in ~/.tmux.conf
+    ~/.tmux/plugins/tpm/bin/install_plugins
+fi
