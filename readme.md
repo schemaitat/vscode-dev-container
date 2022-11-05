@@ -29,5 +29,5 @@ RUN sh -c "$(wget -qO - https://raw.githubusercontent.com/schemaitat/vscode-dev-
     -a 'CASE_SENSITIVE="false"' \
     -a 'HYPHEN_INSENSITIVE="true"' \
     -a 'export TERM=xterm-256color' \
-    -s https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/zshrc-personal.sh
+    -s https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/post.sh
 ```

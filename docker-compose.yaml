@@ -1,0 +1,38 @@
+version: "3"
+services:
+  zsh-in-docker-dev:
+    container_name: zsh-in-docker-dev
+    image: alpine:latest
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+
+  test-alpine:
+    image: alpine:latest
+    container_name: test_alpine
+    entrypoint: /bin/sh
+    command: -c "while sleep 1000; do :; done"
+
+  test-ubuntu:
+    image: ubuntu:latest
+    container_name: test_ubuntu
+    entrypoint: /bin/sh
+    command: -c "while sleep 1000; do :; done"
+
+  test-ubuntu-14.04:
+    image: ubuntu:14.04
+    container_name: test_ubuntu-14.04
+    entrypoint: /bin/sh
+    command: -c "while sleep 1000; do :; done"
+
+  test-debian:
+    image: debian:latest
+    container_name: test_debian
+    entrypoint: /bin/sh
+    command: -c "while sleep 1000; do :; done"
+
+  test-amazonlinux:
+    image: amazonlinux:latest
+    container_name: test_amazonlinux
+    entrypoint: /bin/sh
+    command: -c "while sleep 1000; do :; done"

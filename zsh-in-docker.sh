@@ -82,7 +82,7 @@ install_dependencies() {
 
     case $DIST in
         alpine)
-            $Sudo apk add --update --no-cache $PACKAGES
+            $Sudo apk add --update --no-cache $PACKAGES bash
         ;;
         amzn)
             $Sudo yum update -y
@@ -182,20 +182,14 @@ done
 # run additional post scripts
 for script in ${SCRIPTS}; do
     if [ "`echo $script | grep -E '^http.*'`" != "" ]; then
-        echo "Installing $script"
-        sh -c "$(wget -qO - $script)"
+        echo "Installing $script from url."
+        sh -c "$(curl -s $script)"
     else
-        echo "Post scripts must be the url of the raw script."
+        echo "Installing $script from file."
+        if [ -f $script ]; then
+            sh $script
+        else 
+            echo "Script $script does not exist."
+        fi
     fi
 done
-
-# install tmux plugin manager if tmux is a packages
-# see https://github.com/tmux-plugins/tpm/blob/master/docs/managing_plugins_via_cmd_line.md
-if [ -z "${PACKAGES##*tmux*}" ]; then
-    # set default shell for tmux
-    echo "set-option -g default-shell /bin/zsh" >> ~/.tmux.conf
-
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-    # install plugins specified in ~/.tmux.conf
-    ~/.tmux/plugins/tpm/bin/install_plugins
-fi

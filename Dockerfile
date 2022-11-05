@@ -34,11 +34,11 @@ USER $USERNAME
 #     -s https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/zshrc-personal.sh
   
 
-COPY zsh-in-docker.sh /tmp/zsh-in-docker.sh
-RUN sudo chmod +x /tmp/zsh-in-docker.sh && /tmp/zsh-in-docker.sh \
+COPY . /tmp
+RUN sudo chmod -R +x /tmp/*.sh && /tmp/zsh-in-docker.sh \
     -d https://raw.githubusercontent.com/schemaitat/dotfiles/master/.vimrc \
     -d https://raw.githubusercontent.com/schemaitat/dotfiles/master/.tmux.conf \
-    -i vim -i tmux \
+    -i vim -i tmux -i htop \
     -p git -p git-auto-fetch \
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-completions \
@@ -46,6 +46,6 @@ RUN sudo chmod +x /tmp/zsh-in-docker.sh && /tmp/zsh-in-docker.sh \
     -a 'CASE_SENSITIVE="true"' \
     -a 'HYPHEN_INSENSITIVE="true"' \
     -a 'export TERM=xterm-256color' \
-    -s https://raw.githubusercontent.com/schemaitat/vscode-dev-container/main/zshrc-personal.sh
+    -s /tmp/post.sh
 
 ENTRYPOINT [ "/bin/zsh" ]
